@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Map;
 
 public class Util {
-    private static Map<Integer, Integer> caloriesByDay = new HashMap<>();
+    private final static Map<Integer, Integer> caloriesByDay = new HashMap<>();
 
     public static boolean isBetweenHalfOpen(LocalTime lt, LocalTime startTime, LocalTime endTime) {
         return lt.compareTo(startTime) >= 0 && lt.compareTo(endTime) <0;
     }
 
-    public static void ValueFieldByDay(List<UserMeal> list) {
+    public static void ValueExcessFieldByDay(List<UserMeal> list) {
         LocalDateTime tmpTime = list.get(0).getDateTime();
         int sumByDayCalories = 0;
         for (int i = 0; i < list.size(); i++) {

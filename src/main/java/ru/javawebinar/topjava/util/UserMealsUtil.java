@@ -26,26 +26,31 @@ public class UserMealsUtil {
         mealsTo.forEach(System.out::println);
 
 
-
-//        System.out.println(filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
+    System.out.println(filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
     }
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         // TODO return filtered list with excess. Implement by cycles
-        List <UserMealWithExcess> excessList = new ArrayList<>();
-        Util.ValueFieldByDay(meals);
+        List<UserMealWithExcess> excessList = new ArrayList<>();
+        Util.ValueExcessFieldByDay(meals);
 
         for (UserMeal meal : meals) {
             if (Util.isBetweenHalfOpen(LocalTime.from(meal.getDateTime()), startTime, endTime)) {
                 excessList.add(new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories()
-                        ,Util.getCaloriesByDay().get(meal.getDateTime().getDayOfYear()) <= caloriesPerDay));
+                        , Util.getCaloriesByDay().get(meal.getDateTime().getDayOfYear()) <= caloriesPerDay));
             }
         }
         return excessList;
     }
 
     public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+        List<UserMealWithExcess> excessList = new ArrayList<>();
+        Util.ValueExcessFieldByDay(meals);
+        meals.stream().
+                filter(userMeal -> Util.isBetweenHalfOpen(LocalTime.from(userMeal.getDateTime()), startTime, endTime))
+                .forEachOrdered(u -> excessList.add(new UserMealWithExcess(u.getDateTime(), u.getDescription(), u.getCalories(),
+                        Util.getCaloriesByDay().get(u.getDateTime().getDayOfYear()) <= caloriesPerDay)));
+        return excessList;
 
-        return null;
     }
 }
